@@ -1,0 +1,14 @@
+package com.tr.model;
+
+import java.util.Date;
+
+public class Customer {
+
+	
+	private int custid;
+	private String name;
+	private Date dob;
+	public Customer() {
+		// TODO Auto-generated constructor stub
+	}
+}

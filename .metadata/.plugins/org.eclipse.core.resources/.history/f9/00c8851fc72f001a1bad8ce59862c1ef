@@ -1,0 +1,42 @@
+package com.tr.presentation;
+
+import java.util.List;
+import java.util.Scanner;
+
+import com.tr.CustomerDao;
+import com.tr.CustomerDaoimpl;
+import com.tr.CustomerException;
+import com.tr.model.Customer;
+
+public class MainClient {
+
+	public static void main(String[] args) {
+		Scanner scanner=new Scanner(System.in);
+		CustomerDao dao=new CustomerDaoimpl();
+		System.out.println("1.AllCustomers\n2.GetByid\n3.AddCustomer\n4.updateCustomer\n5.DeleteCustomer");
+		int option=scanner.nextInt();
+		switch (option) {
+		case 1:{
+				try {
+					List<Customer> list=dao.allCustomers();
+									for (Customer customer : list) {
+						System.out.println(customer);
+						
+					}
+				} catch (CustomerException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+		}
+			
+			break;
+
+		default:
+			break;
+		}
+		
+
+	}
+
+}

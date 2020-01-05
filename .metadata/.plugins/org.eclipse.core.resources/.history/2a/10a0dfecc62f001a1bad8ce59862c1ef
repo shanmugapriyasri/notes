@@ -1,0 +1,17 @@
+package com.tr.presentation;
+
+import java.util.Scanner;
+
+import com.tr.CustomerDao;
+import com.tr.CustomerDaoimpl;
+
+public class MainClient {
+
+	public static void main(String[] args) {
+		Scanner scanner=new Scanner(System.in);
+		CustomerDao dao=new CustomerDaoimpl();
+		
+
+	}
+
+}

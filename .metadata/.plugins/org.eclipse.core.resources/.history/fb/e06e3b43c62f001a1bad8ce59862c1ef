@@ -1,0 +1,109 @@
+package com.tr;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+
+import com.tr.model.Customer;
+
+public class CustomerDaoimpl implements CustomerDao {
+
+	PreparedStatement statement=null;
+	ResultSet resultSet=null;
+	int row=0;
+	boolean status=false;
+	
+	
+	@Override
+	public List<Customer> allCustomers() throws CustomerException {
+		List<Customer> customerlist=new ArrayList<Customer>();
+		try(Connection connection=MyConnection.getConnection();){
+			statement=connection.prepareStatement("select * from customer");
+			
+			 resultSet=statement.executeQuery();
+			 Customer customer=null;
+			while(resultSet.next()) {
+				customer=new Customer();
+				customer.setCustid(resultSet.getInt(1));
+				customer.setName(resultSet.getString(2));
+				customer.setDob(new Date(resultSet.getDate(3).getTime()));
+				customerlist.add(customer);
+			}
+			
+		}catch (Exception e) {
+			throw new CustomerException("Customer List Exception =>"+e.getMessage());
+		}
+		return customerlist;
+	}
+
+	@Override
+	public Customer getCustomerById(int custid) throws CustomerException {
+		 Customer customer=null;
+try(Connection connection=MyConnection.getConnection();){
+	statement=connection.prepareStatement("select * from customer where custid=?");
+	statement.setInt(1, custid);
+	
+	 resultSet=statement.executeQuery();
+	
+	if(resultSet.next()) {
+		customer=new Customer();
+		customer.setCustid(resultSet.getInt(1));
+		customer.setName(resultSet.getString(2));
+		customer.setDob(new Date(resultSet.getDate(3).getTime()));	
+	}
+		}catch (Exception e) {
+			throw new CustomerException("Get Customerbyid Exception");
+		}
+		// TODO Auto-generated method stub
+		return customer;
+	}
+
+	@Override
+	public int aaddCustomer(Customer cutomer) throws CustomerException {
+try(Connection connection=MyConnection.getConnection();){
+	statement=connection.prepareStatement("insert into customer(name,dob) values (?,?)");
+	statement.setString(1, cutomer.getName());
+	statement.setDate(2, new java.sql.Date(cutomer.getDob().getTime()) );
+	row=statement.executeUpdate();
+		}catch (Exception e) {
+			throw new CustomerException(" addd Customer Exception");
+		}
+		return row;
+	}
+
+	@Override
+	public boolean updateCustomer(Customer cutomer) throws CustomerException {
+try(Connection connection=MyConnection.getConnection();){
+	statement=connection.prepareStatement("update customer set name=?,dob=? where custid=?");
+	statement.setString(1, cutomer.getName());
+	statement.setDate(2, new java.sql.Date(cutomer.getDob().getTime()) );
+	statement.setInt(3, cutomer.getCustid());
+	row=statement.executeUpdate();
+		}catch (Exception e) {
+			throw new CustomerException("Update Customer Exception");
+		}
+		// TODO Auto-generated method stub
+if(row>0)
+	status=true;
+		return status;
+	}
+
+	@Override
+	public boolean deleteCustomer(int custid) throws CustomerException {
+try(Connection connection=MyConnection.getConnection();){
+	statement=connection.prepareStatement("delete from customer where custid=?");
+	statement.setInt(1, cutomer.getCustid());
+	row=statement.executeUpdate();	
+		}catch (Exception e) {
+			throw new CustomerException("Delete Customer Exception");
+		}
+if(row>0)
+	status=true;
+		return status;
+	}
+
+}
